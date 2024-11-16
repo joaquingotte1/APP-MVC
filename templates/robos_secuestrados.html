@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robos Secuestrados</title>
+    <!-- Vincula el archivo CSS desde la carpeta static/css -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .mb-4 {
+            margin-bottom: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #ddd;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a, .pagination span {
+            padding: 8px 16px;
+            margin: 0 5px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .pagination .disabled {
+            background-color: #ddd;
+            color: #aaa;
+        }
+
+        .pagination .active {
+            background-color: #45a049;
+        }
+
+        .pagination a:hover {
+            background-color: #45a049;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .form-label {
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        <h1 class="text-center">Listado de Robos Secuestrados</h1>
+
+        <!-- Filtro o búsqueda (opcional) -->
+        <div class="mb-4">
+            <label for="searchField" class="form-label">Buscar:</label>
+            <input type="text" class="form-control" id="searchField" placeholder="Buscar por tipo de trámite o descripción">
+        </div>
+
+        <!-- Tabla -->
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo de Trámite</th>
+                    <th>Fecha de Trámite</th>
+                    <th>Provincia</th>
+                    <th>Descripción Automotor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    <td>{{ registro['id'] }}</td>
+                    <td>{{ registro['tramite_tipo'] }}</td>
+                    <td>{{ registro['tramite_fecha'] }}</td>
+                    <td>{{ registro['registro_seccional_provincia'] }}</td>
+                    <td>{{ registro['automotor_modelo_descripcion'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <!-- Botón para retroceder página -->
+            {% if page > 1 %}
+                <a href="{{ url_for('get_all_robos_secuestrados', page=page-1) }}">Anterior</a>
+            {% else %}
+                <span class="disabled">Anterior</span>
+            {% endif %}
+        
+            <!-- Mostrar solo las primeras 3 páginas -->
+            {% for i in range(1, visible_pages + 1) %}
+                <a href="{{ url_for('get_all_robos_secuestrados', page=i) }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
+            {% endfor %}
+        
+            <!-- Botón para continuar página -->
+            {% if page < total_pages %}
+                <a href="{{ url_for('get_all_robos_secuestrados', page=page+1) }}">Siguiente</a>
+            {% else %}
+                <span class="disabled">Siguiente</span>
+            {% endif %}
+        </div>
+        
+        <!-- Botones para retroceder o avanzar por fecha -->
+        <div class="date-navigation">
+            <form action="{{ url_for('get_robos_secuestrados_by_date_range', start_date='fecha_anterior', end_date='fecha_siguiente') }}" method="get">
+                <!-- Aquí 'fecha_anterior' y 'fecha_siguiente' se pasan como fechas dinámicas, ajusta a tu necesidad -->
+                <button type="submit" class="btn btn-secondary">Retroceder Fecha</button>
+                <button type="submit" class="btn btn-secondary">Avanzar Fecha</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
