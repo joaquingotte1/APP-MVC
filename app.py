@@ -27,8 +27,8 @@ def get_all_robos_secuestrados():
 
         total_pages = (total_records // records_per_page) + (1 if total_records % records_per_page > 0 else 0)
 
-        if page < 1 or page > total_pages:
-            return render_template('error.html', mensaje="Número de página inválido.")
+        # if page < 1 or page > total_pages:
+        #     return render_template('error.html', mensaje="Número de página inválido.")
 
         # Definir visible_pages (por ejemplo, mostrar hasta 3 páginas)
         visible_pages = min(3, total_pages)

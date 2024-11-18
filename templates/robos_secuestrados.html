@@ -167,37 +167,41 @@ form .form-control {
         
 
         <!-- Tabla -->
-        <table class="table table-hover table-bordered">
-            <thead>
-                <tr>
-                    
-                    <th>Tipo de Trámite</th>
-                    <th>Fecha de Trámite</th>
-                    <th>Domicilio Titular</th>
-                    <th>Nacionalidad Titular</th>
-                    <th>Año Nacimiento Titular</th>
-                    <th>Genero</th>
-                    <th>Provincia</th>
-                    <th>Descripción Automotor</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for registro in registros %}
-                <tr>
-                    
-                    <td>{{ registro['tramite_tipo'] }}</td>
-                    <td>{{ registro['tramite_fecha'] }}</td>
-                    <td>{{ registro['titular_domicilio_localidad'] }}</td>
-                    <td>{{ registro['titular_pais_nacimiento'] }}</td>
-                    <td>{{ registro['titular_anio_nacimiento'] }}</td>
-                    <td>{{ registro['titular_genero'] }}</td>
-                    <td>{{ registro['registro_seccional_provincia'] }}</td>
-                    <td>{{ registro['automotor_tipo_descripcion'] }} - {{ registro['automotor_modelo_descripcion'] }}- {{ registro['automotor_anio_modelo'] }}</td>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Tipo de Trámite</th>
+            <th>Fecha de Trámite</th>
+            <th>Domicilio Titular</th>
+            <th>Nacionalidad Titular</th>
+            <th>Año Nacimiento Titular</th>
+            <th>Género</th>
+            <th>Provincia</th>
+            <th>Descripción Automotor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if registros %}
+            {% for registro in registros %}
+            <tr>
+                <td>{{ registro['tramite_tipo'] }}</td>
+                <td>{{ registro['tramite_fecha'] }}</td>
+                <td>{{ registro['titular_domicilio_localidad'] }}</td>
+                <td>{{ registro['titular_pais_nacimiento'] }}</td>
+                <td>{{ registro['titular_anio_nacimiento'] }}</td>
+                <td>{{ registro['titular_genero'] }}</td>
+                <td>{{ registro['registro_seccional_provincia'] }}</td>
+                <td>{{ registro['automotor_tipo_descripcion'] }} - {{ registro['automotor_modelo_descripcion'] }} - {{ registro['automotor_anio_modelo'] }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="8" class="text-center">No se encontraron resultados para la búsqueda.</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
 
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
 
         <div class="pagination">
             <!-- Botón para retroceder página -->
