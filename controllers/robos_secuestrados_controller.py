@@ -43,3 +43,32 @@ def get_by_date_range(start_date, end_date):
     resultados = cursor.fetchall()
     conn.close()
     return [dict(fila) for fila in resultados]
+
+def search_records(search_term, page, records_per_page):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Calcula el offset (desplazamiento) basado en la página
+    offset = (page - 1) * records_per_page
+
+    # Consulta para buscar por término en campos relevantes
+    cursor.execute("""
+        SELECT * FROM robos_secuestrados
+        WHERE tramite_tipo LIKE ? OR automotor_modelo_descripcion LIKE ? OR titular_domicilio_localidad LIKE ?
+                   OR titular_genero LIKE ? OR titular_pais_nacimiento LIKE ? OR automotor_tipo_descripcion LIKE ?
+        LIMIT ? OFFSET ?
+    """, (f"%{search_term}%", f"%{search_term}%", f"%{search_term}%", f"%{search_term}%", f"%{search_term}%", f"%{search_term}%", records_per_page, offset))
+    
+    resultados = cursor.fetchall()
+
+    # Ejecuta otra consulta para obtener el total de registros coincidentes
+    cursor.execute("""
+        SELECT COUNT(*) FROM robos_secuestrados
+        WHERE tramite_tipo LIKE ? OR automotor_modelo_descripcion LIKE ? OR titular_domicilio_localidad LIKE ?
+                   OR titular_genero LIKE ? OR titular_pais_nacimiento LIKE ? OR automotor_tipo_descripcion LIKE ?
+    """, (f"%{search_term}%", f"%{search_term}%", f"%{search_term}%", f"%{search_term}%", f"%{search_term}%", f"%{search_term}%"))
+    total_records = cursor.fetchone()[0]
+
+    conn.close()
+
+    return [dict(fila) for fila in resultados], total_records

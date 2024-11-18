@@ -4,97 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robos Secuestrados</title>
-    <!-- Vincula el archivo CSS desde la carpeta static/css -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
+/* Mantengo los estilos proporcionados */
+/* Mantengo los estilos proporcionados */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
 
-        .mb-4 {
-            margin-bottom: 20px;
-        }
+.mb-4 {
+    margin-bottom: 20px;
+}
 
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
 
-        .table th, .table td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
+.table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
 
-        .table th {
-            background-color: #4CAF50;
-            color: white;
-        }
+.table th {
+    background-color: #4CAF50;
+    color: white;
+}
 
-        .table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
-        .table-hover tbody tr:hover {
-            background-color: #ddd;
-        }
+.table-hover tbody tr:hover {
+    background-color: #ddd;
+}
 
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
 
-        .pagination a, .pagination span {
-            padding: 8px 16px;
-            margin: 0 5px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-        }
+.pagination a, .pagination span {
+    padding: 8px 16px;
+    margin: 0 5px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
 
-        .pagination .disabled {
-            background-color: #ddd;
-            color: #aaa;
-        }
+.pagination .disabled {
+    background-color: #ddd;
+    color: #aaa;
+}
 
-        .pagination .active {
-            background-color: #45a049;
-        }
+.pagination .active {
+    background-color: #45a049;
+}
 
-        .pagination a:hover {
-            background-color: #45a049;
-        }
+.pagination a:hover {
+    background-color: #45a049;
+}
 
-        .form-control {
-            width: 100%;
-            padding: 8px;
-            margin-top: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
+/* Estilo para los filtros de búsqueda */
+.form-control {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;  /* Asegura que el padding no afecte el ancho */
+}
 
-        .form-label {
-            font-size: 1.1em;
-            font-weight: bold;
-        }
+.form-label {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+button.btn {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+button.btn:hover {
+    background-color: #45a049;
+}
+
+/* Alineación vertical de los filtros */
+form {
+    display: flex;
+    flex-direction: column; /* Esto hace que los elementos se alineen en una columna */
+    gap: 10px;  /* Reduce el espacio entre los elementos */
+    max-width: 600px;  /* Limita el ancho del formulario */
+    margin: 0 auto;  /* Centra el formulario */
+}
+
+form label {
+    margin-top: 0;  /* Elimina el margen superior en los labels */
+}
+
+form .form-control {
+    margin-top: 0;  /* Elimina el margen superior en los inputs */
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 768px) {
+    form {
+        width: 100%;  /* En pantallas pequeñas, usa todo el ancho */
+    }
+}
+
 
     </style>
 </head>
@@ -104,19 +146,37 @@
     <div class="container">
         <h1 class="text-center">Listado de Robos Secuestrados</h1>
 
-        <!-- Filtro o búsqueda (opcional) -->
         <div class="mb-4">
-            <label for="searchField" class="form-label">Buscar:</label>
-            <input type="text" class="form-control" id="searchField" placeholder="Buscar por tipo de trámite o descripción">
+            <form method="get" action="{{ url_for('get_all_robos_secuestrados') }}">
+                <!-- Búsqueda por texto -->
+                <label for="searchField" class="form-label">Buscar:</label>
+                <input type="text" name="search" class="form-control" id="searchField" 
+                       placeholder="Buscar por tipo de trámite, descripción ,domicilio titular" value="{{ search_term }}">
+                
+                <!-- Filtrar por fecha -->
+                <label for="startDate" class="form-label mt-3">Fecha de Trámite (Desde):</label>
+                <input type="date" name="start_date" id="startDate" class="form-control" value="{{ start_date }}">
+        
+                <label for="endDate" class="form-label mt-3">Fecha de Trámite (Hasta):</label>
+                <input type="date" name="end_date" id="endDate" class="form-control" value="{{ end_date }}">
+        
+                <!-- Botón de búsqueda -->
+                <button type="submit" class="btn btn-primary mt-3">Aplicar Filtros</button>
+            </form>
         </div>
+        
 
         <!-- Tabla -->
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    
                     <th>Tipo de Trámite</th>
                     <th>Fecha de Trámite</th>
+                    <th>Domicilio Titular</th>
+                    <th>Nacionalidad Titular</th>
+                    <th>Año Nacimiento Titular</th>
+                    <th>Genero</th>
                     <th>Provincia</th>
                     <th>Descripción Automotor</th>
                 </tr>
@@ -124,11 +184,16 @@
             <tbody>
                 {% for registro in registros %}
                 <tr>
-                    <td>{{ registro['id'] }}</td>
+                    
                     <td>{{ registro['tramite_tipo'] }}</td>
                     <td>{{ registro['tramite_fecha'] }}</td>
+                    <td>{{ registro['titular_domicilio_localidad'] }}</td>
+                    <td>{{ registro['titular_pais_nacimiento'] }}</td>
+                    <td>{{ registro['titular_anio_nacimiento'] }}</td>
+                    <td>{{ registro['titular_genero'] }}</td>
                     <td>{{ registro['registro_seccional_provincia'] }}</td>
-                    <td>{{ registro['automotor_modelo_descripcion'] }}</td>
+                    <td>{{ registro['automotor_tipo_descripcion'] }} - {{ registro['automotor_modelo_descripcion'] }}- {{ registro['automotor_anio_modelo'] }}</td>
+
                 </tr>
                 {% endfor %}
             </tbody>
@@ -141,13 +206,16 @@
             {% else %}
                 <span class="disabled">Anterior</span>
             {% endif %}
-        
-            <!-- Mostrar solo las primeras 3 páginas -->
-            {% for i in range(1, visible_pages + 1) %}
+            
+            <!-- Mostrar las páginas visibles -->
+            {% set start_page = page %}
+            {% set end_page = start_page + 2 if start_page + 2 <= total_pages else total_pages %}
+            
+            {% for i in range(start_page, end_page + 1) %}
                 <a href="{{ url_for('get_all_robos_secuestrados', page=i) }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
             {% endfor %}
-        
-            <!-- Botón para continuar página -->
+            
+            <!-- Botón para avanzar página -->
             {% if page < total_pages %}
                 <a href="{{ url_for('get_all_robos_secuestrados', page=page+1) }}">Siguiente</a>
             {% else %}
@@ -155,15 +223,6 @@
             {% endif %}
         </div>
         
-        <!-- Botones para retroceder o avanzar por fecha -->
-        <div class="date-navigation">
-            <form action="{{ url_for('get_robos_secuestrados_by_date_range', start_date='fecha_anterior', end_date='fecha_siguiente') }}" method="get">
-                <!-- Aquí 'fecha_anterior' y 'fecha_siguiente' se pasan como fechas dinámicas, ajusta a tu necesidad -->
-                <button type="submit" class="btn btn-secondary">Retroceder Fecha</button>
-                <button type="submit" class="btn btn-secondary">Avanzar Fecha</button>
-            </form>
-        </div>
-    </div>
-
+        
 </body>
 </html>
